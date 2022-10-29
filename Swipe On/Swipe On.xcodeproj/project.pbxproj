@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		93DA42ADF30D844CB1FF4566 /* Pods_Swipe_On.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22067EDD78EF3A91EFDD4C61 /* Pods_Swipe_On.framework */; };
 		DE20D0AC290C901600105CB9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE20D0AB290C901600105CB9 /* AppDelegate.swift */; };
 		DE20D0AE290C901600105CB9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE20D0AD290C901600105CB9 /* SceneDelegate.swift */; };
 		DE20D0B0290C901600105CB9 /* SwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE20D0AF290C901600105CB9 /* SwipeViewController.swift */; };
@@ -16,6 +17,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		22067EDD78EF3A91EFDD4C61 /* Pods_Swipe_On.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Swipe_On.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		27252FD31344C56747F7E32D /* Pods-Swipe On.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swipe On.debug.xcconfig"; path = "Target Support Files/Pods-Swipe On/Pods-Swipe On.debug.xcconfig"; sourceTree = "<group>"; };
+		67D0F133CCAFE685630DCB4D /* Pods-Swipe On.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swipe On.release.xcconfig"; path = "Target Support Files/Pods-Swipe On/Pods-Swipe On.release.xcconfig"; sourceTree = "<group>"; };
 		DE20D0A8290C901600105CB9 /* Swipe On.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Swipe On.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE20D0AB290C901600105CB9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DE20D0AD290C901600105CB9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -31,17 +35,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93DA42ADF30D844CB1FF4566 /* Pods_Swipe_On.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		668F6D6928423FFAF4F0E26F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				22067EDD78EF3A91EFDD4C61 /* Pods_Swipe_On.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		DE20D09F290C901600105CB9 = {
 			isa = PBXGroup;
 			children = (
 				DE20D0AA290C901600105CB9 /* Swipe On */,
 				DE20D0A9290C901600105CB9 /* Products */,
+				F789B8DA9F1D29D5F2455403 /* Pods */,
+				668F6D6928423FFAF4F0E26F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +82,16 @@
 			path = "Swipe On";
 			sourceTree = "<group>";
 		};
+		F789B8DA9F1D29D5F2455403 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				27252FD31344C56747F7E32D /* Pods-Swipe On.debug.xcconfig */,
+				67D0F133CCAFE685630DCB4D /* Pods-Swipe On.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -74,9 +99,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DE20D0BC290C901700105CB9 /* Build configuration list for PBXNativeTarget "Swipe On" */;
 			buildPhases = (
+				0694A5BC1A4CB55877CE5B99 /* [CP] Check Pods Manifest.lock */,
 				DE20D0A4290C901600105CB9 /* Sources */,
 				DE20D0A5290C901600105CB9 /* Frameworks */,
 				DE20D0A6290C901600105CB9 /* Resources */,
+				4D774FAF84ABD31ED84614EF /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -132,6 +159,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0694A5BC1A4CB55877CE5B99 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Swipe On-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4D774FAF84ABD31ED84614EF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Swipe On/Pods-Swipe On-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Swipe On/Pods-Swipe On-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Swipe On/Pods-Swipe On-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DE20D0A4290C901600105CB9 /* Sources */ = {
@@ -282,6 +351,7 @@
 		};
 		DE20D0BD290C901700105CB9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 27252FD31344C56747F7E32D /* Pods-Swipe On.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -311,6 +381,7 @@
 		};
 		DE20D0BE290C901700105CB9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 67D0F133CCAFE685630DCB4D /* Pods-Swipe On.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
