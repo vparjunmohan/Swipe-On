@@ -6,12 +6,37 @@
 //
 
 import UIKit
+import Alamofire
 
 class SwipeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let defaults = UserDefaults.standard
         view.addSubview(addSwipeView())
+        AF.request("https://pixabay.com/api/?key=30936526-e786bc4c469026f636558956e&q=yellow+flowers&image_type=photo").responseJSON(completionHandler: { response in
+                    switch response.result {
+                    case .success:
+                        
+                        if let responseValue = response.value as? [String: Any], let hits = responseValue["hits"] as? [[String:Any]]{
+                            for hit in hits {
+                                if let imageURL = hit["largeImageURL"] as? String {
+                                    if let viewTag = defaults.object(forKey: "viewTag") as? Int, let currentSwipeView = self.view.viewWithTag(viewTag), let currentImageView = currentSwipeView.viewWithTag(200) as? UIImageView{
+                                        currentImageView.downloaded(from: imageURL)
+                                    }
+                                    
+                                    print(imageURL)
+                                }
+                            }
+                        }
+                        break
+                    default:
+                        break
+                    }
+
+                } )
+
+       
     }
     
     func addSwipeView() -> UIView {
@@ -23,12 +48,13 @@ class SwipeViewController: UIViewController {
         if let viewTag = defaults.object(forKey: "viewTag") as? Int {
             swipeView.tag = viewTag
         }
-        swipeView.backgroundColor = color
+//        swipeView.backgroundColor = color
         swipeView.layer.cornerRadius = 10
         swipeView.layer.shadowColor = color.cgColor
         swipeView.applyCommonDropShadow(radius: 5, opacity: 1)
         swipeView.alpha = 0
         swipeView.frame = CGRect(x: (view.center.x)-(viewWidth/2), y: (view.center.y)-(viewHeight/2), width: viewWidth, height: viewHeight)
+        setupImageContent(parentView: swipeView)
         
         UIView.animate(withDuration: 0.1, delay: 0.0, options: UIView.AnimationOptions.curveEaseInOut, animations: { () -> Void in
             swipeView.alpha = 1
@@ -40,6 +66,15 @@ class SwipeViewController: UIViewController {
         swipeView.addGestureRecognizer(viewSwippedRight)
         swipeView.addGestureRecognizer(viewSwippedLeft)
         return swipeView
+    }
+    
+    func setupImageContent(parentView: UIView){
+        let imageContent = UIImageView()
+        imageContent.tag = 200
+        imageContent.contentMode = .scaleAspectFit
+        imageContent.backgroundColor = .black
+        parentView.addSubview(imageContent)
+        imageContent.frame = CGRect(x: 0, y: 0, width: parentView.frame.width, height: parentView.frame.height)
     }
     
     @objc func viewIsSwipped(_ sender: UISwipeGestureRecognizer){
@@ -68,6 +103,10 @@ class SwipeViewController: UIViewController {
                 UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: { () -> Void in
                     currentSwipeView.alpha = 0
                 }) { completed in
+                    if let imageContentView = currentSwipeView.viewWithTag(200) as? UIImageView {
+                        imageContentView.removeFromSuperview()
+                    }
+                    
                     currentSwipeView.removeFromSuperview()
                 }
                 newSwipeView.isUserInteractionEnabled = true
@@ -84,6 +123,9 @@ class SwipeViewController: UIViewController {
                 UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: { () -> Void in
                     currentSwipeView.alpha = 0
                 }) { completed in
+                    if let imageContentView = currentSwipeView.viewWithTag(200) as? UIImageView {
+                        imageContentView.removeFromSuperview()
+                    }
                     currentSwipeView.removeFromSuperview()
                 }
                 newSwipeView.isUserInteractionEnabled = true
@@ -121,3 +163,23 @@ extension UIView {
     }
 }
 
+extension UIImageView {
+    func downloaded(from url: URL, contentMode mode: ContentMode = .scaleAspectFit) {
+        contentMode = mode
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard
+                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
+                let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
+                let data = data, error == nil,
+                let image = UIImage(data: data)
+                else { return }
+            DispatchQueue.main.async() { [weak self] in
+                self?.image = image
+            }
+        }.resume()
+    }
+    func downloaded(from link: String, contentMode mode: ContentMode = .scaleAspectFit) {
+        guard let url = URL(string: link) else { return }
+        downloaded(from: url, contentMode: mode)
+    }
+}
