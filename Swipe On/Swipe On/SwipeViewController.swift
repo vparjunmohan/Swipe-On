@@ -9,26 +9,24 @@ import UIKit
 import Alamofire
 
 class SwipeViewController: UIViewController {
+    
+    var imageURLArray: [String] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         let defaults = UserDefaults.standard
-        view.addSubview(addSwipeView())
-        AF.request("https://pixabay.com/api/?key=30936526-e786bc4c469026f636558956e&q=yellow+flowers&image_type=photo").responseJSON(completionHandler: { response in
+        
+        AF.request("https://pixabay.com/api/?key=30936526-e786bc4c469026f636558956e&image_type=photo&orientation=vertical").responseJSON(completionHandler: { [self] response in
                     switch response.result {
                     case .success:
-                        
                         if let responseValue = response.value as? [String: Any], let hits = responseValue["hits"] as? [[String:Any]]{
                             for hit in hits {
                                 if let imageURL = hit["largeImageURL"] as? String {
-                                    if let viewTag = defaults.object(forKey: "viewTag") as? Int, let currentSwipeView = self.view.viewWithTag(viewTag), let currentImageView = currentSwipeView.viewWithTag(200) as? UIImageView{
-                                        currentImageView.downloaded(from: imageURL)
-                                    }
-                                    
-                                    print(imageURL)
+                                    self.imageURLArray.append(imageURL)
                                 }
                             }
                         }
+                        view.addSubview(addSwipeView())
                         break
                     default:
                         break
@@ -37,6 +35,19 @@ class SwipeViewController: UIViewController {
                 } )
 
        
+    }
+    
+    func retrieveImageFromURL(currentSwipeView: UIView){
+        let defaults = UserDefaults.standard
+        if imageURLArray.count > 0 {
+            // display image in image view
+            let image = imageURLArray[0]
+            if let currentImageView = currentSwipeView.viewWithTag(100) as? UIImageView{
+                currentImageView.downloaded(from: image)
+            }
+        } 
+        
+        
     }
     
     func addSwipeView() -> UIView {
@@ -55,6 +66,7 @@ class SwipeViewController: UIViewController {
         swipeView.alpha = 0
         swipeView.frame = CGRect(x: (view.center.x)-(viewWidth/2), y: (view.center.y)-(viewHeight/2), width: viewWidth, height: viewHeight)
         setupImageContent(parentView: swipeView)
+        retrieveImageFromURL(currentSwipeView: swipeView)
         
         UIView.animate(withDuration: 0.1, delay: 0.0, options: UIView.AnimationOptions.curveEaseInOut, animations: { () -> Void in
             swipeView.alpha = 1
@@ -70,9 +82,8 @@ class SwipeViewController: UIViewController {
     
     func setupImageContent(parentView: UIView){
         let imageContent = UIImageView()
-        imageContent.tag = 200
-        imageContent.contentMode = .scaleAspectFit
-        imageContent.backgroundColor = .black
+        imageContent.tag = 100
+        imageContent.contentMode = .scaleAspectFill
         parentView.addSubview(imageContent)
         imageContent.frame = CGRect(x: 0, y: 0, width: parentView.frame.width, height: parentView.frame.height)
     }
@@ -82,6 +93,7 @@ class SwipeViewController: UIViewController {
         var currentSwipeFrame = currentSwipeView.frame
         let defaults = UserDefaults.standard
         let angle: CGFloat = 45.0 * CGFloat.pi / 180.0
+        imageURLArray.remove(at: 0)
         
         if let currentSwipeTag = defaults.object(forKey: "viewTag") as? Int{
             defaults.set(currentSwipeTag+1, forKey: "viewTag")
@@ -89,6 +101,7 @@ class SwipeViewController: UIViewController {
         let newSwipeView = addSwipeView()
         newSwipeView.isUserInteractionEnabled = false
         view.addSubview(newSwipeView)
+        retrieveImageFromURL(currentSwipeView: newSwipeView)
         
         switch sender.direction {
         case .left:
