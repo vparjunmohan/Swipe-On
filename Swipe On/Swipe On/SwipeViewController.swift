@@ -11,43 +11,68 @@ import Alamofire
 class SwipeViewController: UIViewController {
     
     var imageURLArray: [String] = []
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let defaults = UserDefaults.standard
         
-        AF.request("https://pixabay.com/api/?key=30936526-e786bc4c469026f636558956e&image_type=photo&orientation=vertical").responseJSON(completionHandler: { [self] response in
-                    switch response.result {
-                    case .success:
-                        if let responseValue = response.value as? [String: Any], let hits = responseValue["hits"] as? [[String:Any]]{
-                            for hit in hits {
-                                if let imageURL = hit["largeImageURL"] as? String {
-                                    self.imageURLArray.append(imageURL)
-                                }
-                            }
+        AF.request("https://pixabay.com/api/?key=30936526-e786bc4c469026f636558956e&q=yellow+flowers&image_type=photo&orientation=vertical&min_width=1080&min_height=1920").responseJSON(completionHandler: { [self] response in
+            switch response.result {
+            case .success:
+                print("success")
+                if let responseValue = response.value as? [String: Any], let hits = responseValue["hits"] as? [[String:Any]]{
+                    for hit in hits {
+                        if let imageURL = hit["largeImageURL"] as? String {
+                            self.imageURLArray.append(imageURL)
                         }
-                        view.addSubview(addSwipeView())
-                        break
-                    default:
-                        break
                     }
-
-                } )
-
-       
+                }
+                view.addSubview(addSwipeView())
+                let subviews = view.subviews
+                for view in subviews{
+                    if view.accessibilityIdentifier == "swipeView" {
+                        retrieveImageFromURL(currentSwipeView: view)
+                    }
+                }
+                break
+            default:
+                break
+            }
+            
+        } )
+        
+        
     }
     
     func retrieveImageFromURL(currentSwipeView: UIView){
-        let defaults = UserDefaults.standard
-        if imageURLArray.count > 0 {
+        if imageURLArray.count > 5 {
             // display image in image view
             let image = imageURLArray[0]
             if let currentImageView = currentSwipeView.viewWithTag(100) as? UIImageView{
                 currentImageView.downloaded(from: image)
             }
-        } 
-        
-        
+        } else {
+            // perform API call
+            imageURLArray.remove(at: 0)
+            AF.request("https://pixabay.com/api/?key=30936526-e786bc4c469026f636558956e&q=yellow+flowers&image_type=photo&orientation=vertical&page=2&min_width=1080&min_height=1920").responseJSON(completionHandler: { [self] response in
+                switch response.result {
+                case .success:
+                    if let responseValue = response.value as? [String: Any], let hits = responseValue["hits"] as? [[String:Any]]{
+                        for hit in hits {
+                            if let imageURL = hit["largeImageURL"] as? String {
+                                self.imageURLArray.append(imageURL)
+                            }
+                        }
+                    }
+                    let image = imageURLArray[0]
+                    if let currentImageView = currentSwipeView.viewWithTag(100) as? UIImageView{
+                        currentImageView.downloaded(from: image)
+                    }
+                    break
+                default:
+                    break
+                }
+            } )
+        }
     }
     
     func addSwipeView() -> UIView {
@@ -60,13 +85,14 @@ class SwipeViewController: UIViewController {
             swipeView.tag = viewTag
         }
 //        swipeView.backgroundColor = color
+        swipeView.accessibilityIdentifier = "swipeView"
         swipeView.layer.cornerRadius = 10
         swipeView.layer.shadowColor = color.cgColor
         swipeView.applyCommonDropShadow(radius: 5, opacity: 1)
         swipeView.alpha = 0
         swipeView.frame = CGRect(x: (view.center.x)-(viewWidth/2), y: (view.center.y)-(viewHeight/2), width: viewWidth, height: viewHeight)
         setupImageContent(parentView: swipeView)
-        retrieveImageFromURL(currentSwipeView: swipeView)
+//        retrieveImageFromURL(currentSwipeView: swipeView)
         
         UIView.animate(withDuration: 0.1, delay: 0.0, options: UIView.AnimationOptions.curveEaseInOut, animations: { () -> Void in
             swipeView.alpha = 1
@@ -89,11 +115,11 @@ class SwipeViewController: UIViewController {
     }
     
     @objc func viewIsSwipped(_ sender: UISwipeGestureRecognizer){
+        print(imageURLArray.count)
         let currentSwipeView = sender.view!
         var currentSwipeFrame = currentSwipeView.frame
         let defaults = UserDefaults.standard
         let angle: CGFloat = 45.0 * CGFloat.pi / 180.0
-        imageURLArray.remove(at: 0)
         
         if let currentSwipeTag = defaults.object(forKey: "viewTag") as? Int{
             defaults.set(currentSwipeTag+1, forKey: "viewTag")
@@ -101,10 +127,12 @@ class SwipeViewController: UIViewController {
         let newSwipeView = addSwipeView()
         newSwipeView.isUserInteractionEnabled = false
         view.addSubview(newSwipeView)
-        retrieveImageFromURL(currentSwipeView: newSwipeView)
+//        retrieveImageFromURL(currentSwipeView: newSwipeView)
+        imageURLArray.remove(at: 0)
         
         switch sender.direction {
         case .left:
+            retrieveImageFromURL(currentSwipeView: newSwipeView)
             currentSwipeFrame.origin.x -= 70
             UIView.animate(withDuration: 0.25, delay: 0.0, options: UIView.AnimationOptions.curveEaseInOut, animations: { [self] () -> Void in
                 view.bringSubviewToFront(currentSwipeView)
@@ -125,6 +153,7 @@ class SwipeViewController: UIViewController {
                 newSwipeView.isUserInteractionEnabled = true
             }
         case .right:
+            retrieveImageFromURL(currentSwipeView: newSwipeView)
             currentSwipeFrame.origin.x += 70
             UIView.animate(withDuration: 0.25, delay: 0.0, options: UIView.AnimationOptions.curveEaseInOut, animations: { [self] () -> Void in
                 view.bringSubviewToFront(currentSwipeView)
@@ -185,7 +214,7 @@ extension UIImageView {
                 let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
                 let data = data, error == nil,
                 let image = UIImage(data: data)
-                else { return }
+            else { return }
             DispatchQueue.main.async() { [weak self] in
                 self?.image = image
             }
