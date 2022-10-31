@@ -75,6 +75,18 @@ class SwipeViewController: UIViewController {
         }
     }
     
+    func createDownloadButton() -> UIButton {
+        let download = UIButton()
+        download.tag = 9876123
+        download.setImage(UIImage(systemName: "arrow.down"), for: .normal)
+        download.layer.cornerRadius = 25
+        download.backgroundColor = .white
+        download.layer.borderColor = UIColor.blue.cgColor
+        download.layer.borderWidth = 1
+        download.tintColor = UIColor.blue
+        return download
+    }
+    
     func addSwipeView() -> UIView {
         let swipeView = UIView()
         let color = UIColor.random()
@@ -91,6 +103,11 @@ class SwipeViewController: UIViewController {
         swipeView.applyCommonDropShadow(radius: 5, opacity: 1)
         swipeView.alpha = 0
         swipeView.frame = CGRect(x: (view.center.x)-(viewWidth/2), y: (view.center.y)-(viewHeight/2), width: viewWidth, height: viewHeight)
+        view.addSubview(createDownloadButton())
+        if let downloadButton = view.viewWithTag(9876123) as? UIButton {
+            downloadButton.frame = CGRect(x: (view.center.x)-(downloadButton.frame.width+25), y: swipeView.frame.maxY + 50, width: 50, height: 50)
+        }
+        
         setupImageContent(parentView: swipeView)
 //        retrieveImageFromURL(currentSwipeView: swipeView)
         
