@@ -14,6 +14,7 @@
 		DE20D0B3290C901600105CB9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE20D0B1290C901600105CB9 /* Main.storyboard */; };
 		DE20D0B5290C901700105CB9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE20D0B4290C901700105CB9 /* Assets.xcassets */; };
 		DE20D0B8290C901700105CB9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE20D0B6290C901700105CB9 /* LaunchScreen.storyboard */; };
+		DEE9D4FC2912E67700641B16 /* ExtensionConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE9D4FB2912E67700641B16 /* ExtensionConstants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		DE20D0B4290C901700105CB9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE20D0B7290C901700105CB9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE20D0B9290C901700105CB9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DEE9D4FB2912E67700641B16 /* ExtensionConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionConstants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 		DE20D0AA290C901600105CB9 /* Swipe On */ = {
 			isa = PBXGroup;
 			children = (
+				DEE9D4FA2912E65200641B16 /* App Constants */,
 				DEE9D4F62912D7F800641B16 /* General */,
 				DEE9D4F72912D80900641B16 /* Controllers */,
 				DEE9D4F82912D81800641B16 /* Storyboards */,
@@ -112,6 +115,14 @@
 				DE20D0B4290C901700105CB9 /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		DEE9D4FA2912E65200641B16 /* App Constants */ = {
+			isa = PBXGroup;
+			children = (
+				DEE9D4FB2912E67700641B16 /* ExtensionConstants.swift */,
+			);
+			path = "App Constants";
 			sourceTree = "<group>";
 		};
 		F789B8DA9F1D29D5F2455403 /* Pods */ = {
@@ -239,6 +250,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE20D0B0290C901600105CB9 /* SwipeViewController.swift in Sources */,
+				DEE9D4FC2912E67700641B16 /* ExtensionConstants.swift in Sources */,
 				DE20D0AC290C901600105CB9 /* AppDelegate.swift in Sources */,
 				DE20D0AE290C901600105CB9 /* SceneDelegate.swift in Sources */,
 			);
