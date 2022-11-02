@@ -99,7 +99,6 @@ class SwipeViewController: UIViewController {
         if let viewTag = defaults.object(forKey: "viewTag") as? Int {
             swipeView.tag = viewTag
         }
-//        swipeView.backgroundColor = color
         swipeView.accessibilityIdentifier = "swipeView"
         swipeView.layer.cornerRadius = 10
         swipeView.layer.shadowColor = color.cgColor
@@ -113,9 +112,7 @@ class SwipeViewController: UIViewController {
             downloadButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
             downloadButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         }
-        
-        setupImageContent(parentView: swipeView)
-        
+        AppUtils().setupImageContent(parentView: swipeView)
         UIView.animate(withDuration: 0.1, delay: 0.0, options: UIView.AnimationOptions.curveEaseInOut, animations: { () -> Void in
             swipeView.alpha = 1
         })
@@ -128,13 +125,7 @@ class SwipeViewController: UIViewController {
         return swipeView
     }
     
-    func setupImageContent(parentView: UIView){
-        let imageContent = UIImageView()
-        imageContent.tag = 100
-        imageContent.contentMode = .scaleAspectFill
-        parentView.addSubview(imageContent)
-        imageContent.frame = CGRect(x: 0, y: 0, width: parentView.frame.width, height: parentView.frame.height)
-    }
+   
     
     @objc func didClickDownloadButton(_ sender: UIButton){
         PHPhotoLibrary.requestAuthorization(for: .readWrite) { [unowned self] (status) in
@@ -158,11 +149,11 @@ class SwipeViewController: UIViewController {
         let newSwipeView = addSwipeView()
         newSwipeView.isUserInteractionEnabled = false
         view.addSubview(newSwipeView)
-//        retrieveImageFromURL(currentSwipeView: newSwipeView)
         imageURLArray.remove(at: 0)
         
         switch sender.direction {
         case .left:
+            AppUtils().removeCurrentToast(view: self.view)
             retrieveImageFromURL(currentSwipeView: newSwipeView)
             currentSwipeFrame.origin.x -= 70
             UIView.animate(withDuration: 0.25, delay: 0.0, options: UIView.AnimationOptions.curveEaseInOut, animations: { [self] () -> Void in
@@ -184,6 +175,7 @@ class SwipeViewController: UIViewController {
                 newSwipeView.isUserInteractionEnabled = true
             }
         case .right:
+            AppUtils().removeCurrentToast(view: self.view)
             retrieveImageFromURL(currentSwipeView: newSwipeView)
             currentSwipeFrame.origin.x += 70
             UIView.animate(withDuration: 0.25, delay: 0.0, options: UIView.AnimationOptions.curveEaseInOut, animations: { [self] () -> Void in
@@ -211,20 +203,13 @@ class SwipeViewController: UIViewController {
 
 extension SwipeViewController {
     func showUI(for status: PHAuthorizationStatus) {
-        let defaults = UserDefaults.standard
         switch status {
         case .authorized:
             print("Authorized")
-            if let currentSwipeTag = defaults.object(forKey: "viewTag") as? Int, let currentSwipeView = view.viewWithTag(currentSwipeTag), let currentImageView = currentSwipeView.viewWithTag(100) as? UIImageView {
-                let downloadableImage = currentImageView.image!
-                UIImageWriteToSavedPhotosAlbum(downloadableImage, nil, nil, nil)
-            }
+            saveImage()
         case .limited:
             print("Limited")
-            if let currentSwipeTag = defaults.object(forKey: "viewTag") as? Int, let currentSwipeView = view.viewWithTag(currentSwipeTag), let currentImageView = currentSwipeView.viewWithTag(100) as? UIImageView {
-                let downloadableImage = currentImageView.image!
-                UIImageWriteToSavedPhotosAlbum(downloadableImage, nil, nil, nil)
-            }
+            saveImage()
         case .restricted:
             print("Restricted")
         case .notDetermined:
@@ -252,5 +237,17 @@ extension SwipeViewController {
                 return
         }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+    
+    func saveImage() {
+        let defaults = UserDefaults.standard
+        if let currentSwipeTag = defaults.object(forKey: "viewTag") as? Int, let currentSwipeView = view.viewWithTag(currentSwipeTag), let currentImageView = currentSwipeView.viewWithTag(100) as? UIImageView {
+            if let downloadableImage = currentImageView.image {
+                UIImageWriteToSavedPhotosAlbum(downloadableImage, nil, nil, nil)
+                if let downloadButton = view.viewWithTag(9876123) as? UIButton {
+                    AppUtils().createToast(message: StringConstants.toastMessage, parentView: self.view, topView: downloadButton)
+                }
+            }
+        }
     }
 }

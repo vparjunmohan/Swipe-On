@@ -15,6 +15,8 @@
 		DE20D0B5290C901700105CB9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE20D0B4290C901700105CB9 /* Assets.xcassets */; };
 		DE20D0B8290C901700105CB9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE20D0B6290C901700105CB9 /* LaunchScreen.storyboard */; };
 		DEE9D4FC2912E67700641B16 /* ExtensionConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE9D4FB2912E67700641B16 /* ExtensionConstants.swift */; };
+		DEE9D4FE2912F96A00641B16 /* AppUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE9D4FD2912F96A00641B16 /* AppUtils.swift */; };
+		DEE9D5022912FF6000641B16 /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE9D5012912FF6000641B16 /* StringConstants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		DE20D0B7290C901700105CB9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE20D0B9290C901700105CB9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DEE9D4FB2912E67700641B16 /* ExtensionConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionConstants.swift; sourceTree = "<group>"; };
+		DEE9D4FD2912F96A00641B16 /* AppUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtils.swift; sourceTree = "<group>"; };
+		DEE9D5012912FF6000641B16 /* StringConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConstants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +125,8 @@
 			isa = PBXGroup;
 			children = (
 				DEE9D4FB2912E67700641B16 /* ExtensionConstants.swift */,
+				DEE9D4FD2912F96A00641B16 /* AppUtils.swift */,
+				DEE9D5012912FF6000641B16 /* StringConstants.swift */,
 			);
 			path = "App Constants";
 			sourceTree = "<group>";
@@ -249,7 +255,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DEE9D4FE2912F96A00641B16 /* AppUtils.swift in Sources */,
 				DE20D0B0290C901600105CB9 /* SwipeViewController.swift in Sources */,
+				DEE9D5022912FF6000641B16 /* StringConstants.swift in Sources */,
 				DEE9D4FC2912E67700641B16 /* ExtensionConstants.swift in Sources */,
 				DE20D0AC290C901600105CB9 /* AppDelegate.swift in Sources */,
 				DE20D0AE290C901600105CB9 /* SceneDelegate.swift in Sources */,
