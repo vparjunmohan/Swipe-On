@@ -71,15 +71,47 @@
 		DE20D0AA290C901600105CB9 /* Swipe On */ = {
 			isa = PBXGroup;
 			children = (
-				DE20D0AB290C901600105CB9 /* AppDelegate.swift */,
-				DE20D0AD290C901600105CB9 /* SceneDelegate.swift */,
-				DE20D0AF290C901600105CB9 /* SwipeViewController.swift */,
-				DE20D0B1290C901600105CB9 /* Main.storyboard */,
-				DE20D0B4290C901700105CB9 /* Assets.xcassets */,
-				DE20D0B6290C901700105CB9 /* LaunchScreen.storyboard */,
+				DEE9D4F62912D7F800641B16 /* General */,
+				DEE9D4F72912D80900641B16 /* Controllers */,
+				DEE9D4F82912D81800641B16 /* Storyboards */,
+				DEE9D4F92912D83300641B16 /* Resources */,
 				DE20D0B9290C901700105CB9 /* Info.plist */,
 			);
 			path = "Swipe On";
+			sourceTree = "<group>";
+		};
+		DEE9D4F62912D7F800641B16 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				DE20D0AB290C901600105CB9 /* AppDelegate.swift */,
+				DE20D0AD290C901600105CB9 /* SceneDelegate.swift */,
+			);
+			path = General;
+			sourceTree = "<group>";
+		};
+		DEE9D4F72912D80900641B16 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				DE20D0AF290C901600105CB9 /* SwipeViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		DEE9D4F82912D81800641B16 /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				DE20D0B6290C901700105CB9 /* LaunchScreen.storyboard */,
+				DE20D0B1290C901600105CB9 /* Main.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		DEE9D4F92912D83300641B16 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DE20D0B4290C901700105CB9 /* Assets.xcassets */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		F789B8DA9F1D29D5F2455403 /* Pods */ = {
@@ -88,7 +120,6 @@
 				27252FD31344C56747F7E32D /* Pods-Swipe On.debug.xcconfig */,
 				67D0F133CCAFE685630DCB4D /* Pods-Swipe On.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
