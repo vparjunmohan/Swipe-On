@@ -7,9 +7,10 @@
 
 import UIKit
 import Alamofire
+import PhotosUI
 
 class SwipeViewController: UIViewController {
-    
+
     var imageURLArray: [String] = []
     
     override func viewDidLoad() {
@@ -136,6 +137,11 @@ class SwipeViewController: UIViewController {
     }
     
     @objc func didClickDownloadButton(_ sender: UIButton){
+        PHPhotoLibrary.requestAuthorization(for: .readWrite) { [unowned self] (status) in
+            DispatchQueue.main.async { [unowned self] in
+                showUI(for: status)
+            }
+        }
        
     }
     
@@ -169,7 +175,7 @@ class SwipeViewController: UIViewController {
                 UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: { () -> Void in
                     currentSwipeView.alpha = 0
                 }) { completed in
-                    if let imageContentView = currentSwipeView.viewWithTag(200) as? UIImageView {
+                    if let imageContentView = currentSwipeView.viewWithTag(100) as? UIImageView {
                         imageContentView.removeFromSuperview()
                     }
                     
@@ -190,7 +196,7 @@ class SwipeViewController: UIViewController {
                 UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: { () -> Void in
                     currentSwipeView.alpha = 0
                 }) { completed in
-                    if let imageContentView = currentSwipeView.viewWithTag(200) as? UIImageView {
+                    if let imageContentView = currentSwipeView.viewWithTag(100) as? UIImageView {
                         imageContentView.removeFromSuperview()
                     }
                     currentSwipeView.removeFromSuperview()
@@ -200,6 +206,52 @@ class SwipeViewController: UIViewController {
         default:
             break
         }
+    }
+}
+
+extension SwipeViewController {
+    func showUI(for status: PHAuthorizationStatus) {
+        let defaults = UserDefaults.standard
+        switch status {
+        case .authorized:
+            print("Authorized")
+            if let currentSwipeTag = defaults.object(forKey: "viewTag") as? Int, let currentSwipeView = view.viewWithTag(currentSwipeTag), let currentImageView = currentSwipeView.viewWithTag(100) as? UIImageView {
+                let downloadableImage = currentImageView.image!
+                UIImageWriteToSavedPhotosAlbum(downloadableImage, nil, nil, nil)
+            }
+        case .limited:
+            print("Limited")
+            if let currentSwipeTag = defaults.object(forKey: "viewTag") as? Int, let currentSwipeView = view.viewWithTag(currentSwipeTag), let currentImageView = currentSwipeView.viewWithTag(100) as? UIImageView {
+                let downloadableImage = currentImageView.image!
+                UIImageWriteToSavedPhotosAlbum(downloadableImage, nil, nil, nil)
+            }
+        case .restricted:
+            print("Restricted")
+        case .notDetermined:
+            break
+        case .denied:
+            let alert = UIAlertController(title: "Allow access to your photos",
+                                             message: "This lets you share from your camera roll and enables other features for photos and videos. Go to your settings and tap \"Photos\".",
+                                             preferredStyle: .alert)
+            let openSettingsAction = UIAlertAction(title: "Open Settings",
+                                                   style: .default) { [unowned self] (_) in
+                // Open app privacy settings
+                gotoAppPrivacySettings()
+            }
+            alert.addAction(openSettingsAction)
+            present(alert, animated: true, completion: nil)
+        @unknown default:
+            break
+        }
+    }
+    
+    func gotoAppPrivacySettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString),
+            UIApplication.shared.canOpenURL(url) else {
+                assertionFailure("Not able to open App privacy settings")
+                return
+        }
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 }
 

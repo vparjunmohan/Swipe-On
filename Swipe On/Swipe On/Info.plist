@@ -21,5 +21,9 @@
 			</array>
 		</dict>
 	</dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Swipe On would like to access photo library</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Swipe On would like to access photo library</string>
 </dict>
 </plist>
