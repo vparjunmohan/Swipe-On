@@ -114,7 +114,6 @@ class SwipeViewController: UIViewController {
         }
         
         setupImageContent(parentView: swipeView)
-//        retrieveImageFromURL(currentSwipeView: swipeView)
         
         UIView.animate(withDuration: 0.1, delay: 0.0, options: UIView.AnimationOptions.curveEaseInOut, animations: { () -> Void in
             swipeView.alpha = 1
@@ -137,41 +136,11 @@ class SwipeViewController: UIViewController {
     }
     
     @objc func didClickDownloadButton(_ sender: UIButton){
-        let buttonBounds = sender.bounds
-        var buttonMaxY = buttonBounds.maxY
-        
-        repeat {
-            let shapeLayer = CAShapeLayer()
-            let aPath = UIBezierPath()
-            aPath.move(to: CGPoint(x:buttonBounds.minX, y:buttonMaxY-1))
-            aPath.addLine(to: CGPoint(x: buttonBounds.maxX, y: buttonMaxY))
-
-           // Keep using the method addLine until you get to the one where about to close the path
-//            aPath.close()
-
-           // If you want to stroke it with a red color
-//            UIColor.red.set()
-//            aPath.lineWidth = 1.0
-//            aPath.stroke()
-            
-            shapeLayer.path = aPath.cgPath
-            shapeLayer.fillColor = UIColor.red.cgColor
-            shapeLayer.lineWidth = 1.0
-            
-            if let button = view.viewWithTag(9876123) as? UIButton {
-                button.layer.addSublayer(shapeLayer)
-            }
-          
-            buttonMaxY -= 1
-        } while (buttonMaxY == buttonBounds.minY)
-        
-//        UIView.animate(withDuration: 2.25, delay: 0.0, options: UIView.AnimationOptions.curveEaseInOut, animations: { [self] () -> Void in
-//
-//        })
+       
     }
     
     @objc func viewIsSwipped(_ sender: UISwipeGestureRecognizer){
-        print(imageURLArray.count)
+        
         let currentSwipeView = sender.view!
         var currentSwipeFrame = currentSwipeView.frame
         let defaults = UserDefaults.standard
