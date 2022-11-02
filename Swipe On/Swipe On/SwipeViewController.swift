@@ -78,10 +78,12 @@ class SwipeViewController: UIViewController {
     func createDownloadButton() -> UIButton {
         let download = UIButton()
         download.tag = 9876123
+        download.translatesAutoresizingMaskIntoConstraints = false
         download.setImage(UIImage(systemName: "arrow.down"), for: .normal)
         download.layer.cornerRadius = 25
         download.backgroundColor = .white
         download.layer.borderColor = UIColor.blue.cgColor
+        download.addTarget(self, action: #selector(didClickDownloadButton(_:)), for: .touchUpInside)
         download.layer.borderWidth = 1
         download.tintColor = UIColor.blue
         return download
@@ -105,7 +107,10 @@ class SwipeViewController: UIViewController {
         swipeView.frame = CGRect(x: (view.center.x)-(viewWidth/2), y: (view.center.y)-(viewHeight/2), width: viewWidth, height: viewHeight)
         view.addSubview(createDownloadButton())
         if let downloadButton = view.viewWithTag(9876123) as? UIButton {
-            downloadButton.frame = CGRect(x: (view.center.x)-(downloadButton.frame.width+25), y: swipeView.frame.maxY + 50, width: 50, height: 50)
+            downloadButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+            downloadButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
+            downloadButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+            downloadButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         }
         
         setupImageContent(parentView: swipeView)
@@ -129,6 +134,40 @@ class SwipeViewController: UIViewController {
         imageContent.contentMode = .scaleAspectFill
         parentView.addSubview(imageContent)
         imageContent.frame = CGRect(x: 0, y: 0, width: parentView.frame.width, height: parentView.frame.height)
+    }
+    
+    @objc func didClickDownloadButton(_ sender: UIButton){
+        let buttonBounds = sender.bounds
+        var buttonMaxY = buttonBounds.maxY
+        
+        repeat {
+            let shapeLayer = CAShapeLayer()
+            let aPath = UIBezierPath()
+            aPath.move(to: CGPoint(x:buttonBounds.minX, y:buttonMaxY-1))
+            aPath.addLine(to: CGPoint(x: buttonBounds.maxX, y: buttonMaxY))
+
+           // Keep using the method addLine until you get to the one where about to close the path
+//            aPath.close()
+
+           // If you want to stroke it with a red color
+//            UIColor.red.set()
+//            aPath.lineWidth = 1.0
+//            aPath.stroke()
+            
+            shapeLayer.path = aPath.cgPath
+            shapeLayer.fillColor = UIColor.red.cgColor
+            shapeLayer.lineWidth = 1.0
+            
+            if let button = view.viewWithTag(9876123) as? UIButton {
+                button.layer.addSublayer(shapeLayer)
+            }
+          
+            buttonMaxY -= 1
+        } while (buttonMaxY == buttonBounds.minY)
+        
+//        UIView.animate(withDuration: 2.25, delay: 0.0, options: UIView.AnimationOptions.curveEaseInOut, animations: { [self] () -> Void in
+//
+//        })
     }
     
     @objc func viewIsSwipped(_ sender: UISwipeGestureRecognizer){
