@@ -1,1 +1,1 @@
-# Swipe-On
+# Swipe On
